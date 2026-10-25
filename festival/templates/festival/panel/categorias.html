@@ -1,0 +1,35 @@
+{% extends 'festival/panel/base.html' %}
+{% block titulo %}Gestión de categorías{% endblock %}
+{% block contenido %}
+<p class="migas">Gestión de categorías · Administración</p>
+<section class="tarjeta tabla-scroll">
+  <table>
+    <thead><tr><th>Categoría</th><th>Estado</th><th class="num">Opciones</th><th></th></tr></thead>
+    <tbody>
+    {% for item in categorias %}
+      <tr>
+        <td>{{ item.obj.nombre }}</td>
+        <td><span class="insignia {{ item.obj.estado }}">{{ item.obj.estado_texto }}</span></td>
+        <td class="num">{{ item.n_opciones }}</td>
+        <td class="num">
+          <form method="post" class="en-linea">{% csrf_token %}
+            <input type="hidden" name="accion" value="alternar"><input type="hidden" name="id" value="{{ item.obj.pk }}">
+            <button class="boton secundario pequeno" type="submit">{% if item.obj.activa %}Pausar{% else %}Reanudar{% endif %}</button>
+          </form>
+        </td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="4">No hay categorías. Agrega la primera abajo.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</section>
+<section class="tarjeta" style="margin-top:1rem">
+  <h3>Nueva categoría</h3>
+  <form method="post" class="formulario">{% csrf_token %}
+    <input type="hidden" name="accion" value="crear">
+    <input type="text" name="nombre" maxlength="100" placeholder="Nombre de la categoría" required>
+    <div class="acciones"><button class="boton" type="submit">Agregar</button></div>
+  </form>
+</section>
+{% endblock %}

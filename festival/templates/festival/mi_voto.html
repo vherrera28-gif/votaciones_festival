@@ -1,0 +1,17 @@
+{% extends 'festival/base.html' %}
+{% block titulo %}Mi voto{% endblock %}
+{% block contenido %}
+<p class="migas">Resultado o mensaje posterior</p>
+<section class="tarjeta">
+  {% if votos %}
+    <h2>Ya votaste en {{ votacion.categoria.nombre }}</h2>
+    {% for v in votos %}
+      <p>Tu voto fue para <strong>{{ v.opcion.nombre }}</strong> el {{ v.fecha|date:"j M Y, g:i a" }}.</p>
+    {% endfor %}
+    <p class="suave">Los resultados se publicarán cuando la Fundación lo disponga.</p>
+  {% else %}
+    <h2>Aún no has votado en {{ votacion.categoria.nombre }}</h2>
+  {% endif %}
+  <div class="acciones"><a class="boton" href="{% url 'festival:categorias' %}">Ir a categorías</a></div>
+</section>
+{% endblock %}

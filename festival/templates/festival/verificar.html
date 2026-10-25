@@ -1,0 +1,20 @@
+{% extends 'festival/base.html' %}
+{% block titulo %}Verificar código{% endblock %}
+{% block contenido %}
+<p class="migas">Verificación</p>
+<section class="tarjeta">
+  <h2>Escribe tu código</h2>
+  <p class="suave">Lo enviamos al celular terminado en {{ votante.celular|slice:"-4:" }}. Vence en 10 minutos.</p>
+  <form method="post" class="formulario" novalidate>
+    {% csrf_token %}
+    {% include 'festival/_campo.html' with campo=form.codigo %}
+    <div class="acciones">
+      <button class="boton" type="submit">Verificar</button>
+    </div>
+  </form>
+  <form method="post" action="{% url 'festival:reenviar' %}" class="acciones">
+    {% csrf_token %}
+    <button class="boton secundario pequeno" type="submit">Reenviar código</button>
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'festival/panel/base.html' %}
+{% block titulo %}Gestión de votaciones{% endblock %}
+{% block contenido %}
+<p class="migas">Gestión de votaciones · Administración</p>
+<section class="tarjeta tabla-scroll">
+  <table>
+    <thead><tr><th>Votación</th><th>Apertura</th><th>Cierre</th><th>Jurado / Público</th><th>Estado</th><th></th></tr></thead>
+    <tbody>
+    {% for v in votaciones %}
+      <tr>
+        <td>{{ v.titulo }}</td>
+        <td>{{ v.apertura|date:"j M Y, g:i a" }}</td>
+        <td>{{ v.cierre|date:"j M Y, g:i a" }}</td>
+        <td>{{ v.peso_jurado }} / {{ v.peso_publico }}</td>
+        <td><span class="insignia {{ v.estado }}">{{ v.estado_texto }}</span></td>
+        <td class="num"><a class="boton secundario pequeno" href="{% url 'festival:panel_votacion_editar' v.pk %}">Editar</a></td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="6">Aún no hay votaciones.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</section>
+<section class="tarjeta" style="margin-top:1rem">
+  <h3>{% if editando %}Editar votación{% else %}Programar votación{% endif %}</h3>
+  <form method="post" class="formulario" novalidate>{% csrf_token %}
+    {% for e in form.non_field_errors %}<p class="errores">{{ e }}</p>{% endfor %}
+    {% include 'festival/_campo.html' with campo=form.categoria %}
+    {% include 'festival/_campo.html' with campo=form.titulo %}
+    {% include 'festival/_campo.html' with campo=form.apertura %}
+    {% include 'festival/_campo.html' with campo=form.cierre %}
+    {% include 'festival/_campo.html' with campo=form.peso_jurado %}
+    <p class="ayuda">El peso del público es el complemento. Con 0 solo cuenta el voto del público.
+      {% if not reglas_confirmadas %}<span class="por-confirmar">Regla por confirmar</span>{% endif %}</p>
+    {% include 'festival/_campo.html' with campo=form.votos_por_votante %}
+    <div class="casilla">{{ form.exigir_mayoria_edad }}<label for="{{ form.exigir_mayoria_edad.id_for_label }}">{{ form.exigir_mayoria_edad.label }}</label></div>
+    <div class="acciones">
+      <button class="boton" type="submit">Guardar</button>
+      {% if editando %}<a class="boton secundario" href="{% url 'festival:panel_votaciones' %}">Cancelar</a>{% endif %}
+    </div>
+  </form>
+</section>
+{% endblock %}

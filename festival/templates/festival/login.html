@@ -1,0 +1,18 @@
+{% extends 'festival/base.html' %}
+{% block titulo %}Iniciar sesión{% endblock %}
+{% block contenido %}
+<p class="migas">Iniciar sesión</p>
+<section class="tarjeta">
+  <h2>Inicia sesión</h2>
+  <form method="post" class="formulario" novalidate>
+    {% csrf_token %}
+    {% for e in form.non_field_errors %}<p class="errores">{{ e }}</p>{% endfor %}
+    {% include 'festival/_campo.html' with campo=form.cedula %}
+    {% include 'festival/_campo.html' with campo=form.celular %}
+    <div class="acciones">
+      <button class="boton" type="submit">Enviar código</button>
+      <a class="boton secundario" href="{% url 'festival:registro' %}">Crear cuenta</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

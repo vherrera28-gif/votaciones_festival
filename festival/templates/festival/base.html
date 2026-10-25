@@ -1,0 +1,43 @@
+{% load static %}<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block titulo %}Votaciones{% endblock %} · Festival de la Leyenda Vallenata</title>
+  <link rel="stylesheet" href="{% static 'festival/css/estilo.css' %}">
+</head>
+<body>
+<header class="cabecera">
+  <div class="contenedor">
+    <a class="marca" href="{% url 'festival:inicio' %}">Festival de la Leyenda Vallenata{% if edicion_activa %} {{ edicion_activa.anio }}{% endif %}</a>
+    <p class="sub">Votaciones oficiales</p>
+  </div>
+</header>
+<nav class="barra" aria-label="Navegación principal">
+  <div class="contenedor fila">
+    <a class="pill {% if seccion == 'publica' %}activa{% endif %}" href="{% url 'festival:inicio' %}">Pública</a>
+    {% if user.is_staff and perms.festival.change_votacion %}
+      <a class="pill {% if seccion == 'panel' %}activa{% endif %}" href="{% url 'festival:panel' %}">Administración</a>
+    {% endif %}
+    <span class="espacio"></span>
+    {% if user.is_authenticated %}
+      <span class="usuario">{% if user.votante %}{{ user.votante }}{% else %}{{ user.username }}{% endif %}</span>
+      <form method="post" action="{% url 'festival:logout' %}" class="en-linea">{% csrf_token %}<button class="pill" type="submit">Cerrar sesión</button></form>
+    {% else %}
+      <a class="pill" href="{% url 'festival:login' %}">Iniciar sesión</a>
+      <a class="pill" href="{% url 'festival:registro' %}">Registrarme</a>
+    {% endif %}
+  </div>
+</nav>
+{% block subnav %}{% endblock %}
+<main>
+  <div class="contenedor">
+    {% if messages %}<ul class="mensajes">{% for m in messages %}<li class="{{ m.tags }}">{{ m }}</li>{% endfor %}</ul>{% endif %}
+    {% block contenido %}{% endblock %}
+    {% if not reglas_confirmadas %}
+      <p class="pie">Las reglas de jurado, verificación de identidad, mayoría de edad y límite de votos son propuestas del equipo y están por confirmar con la Fundación.</p>
+    {% endif %}
+  </div>
+</main>
+</body>
+</html>

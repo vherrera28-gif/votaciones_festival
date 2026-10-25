@@ -1,0 +1,45 @@
+{% extends 'festival/panel/base.html' %}
+{% block titulo %}Gestión de opciones{% endblock %}
+{% block contenido %}
+<p class="migas">Gestión de opciones · Administración</p>
+{% if not seleccionada %}
+  <p>Primero crea una votación.</p>
+{% else %}
+<section class="tarjeta">
+  <form method="get" class="formulario">
+    <label for="sel-votacion">Votación</label>
+    <select id="sel-votacion" name="votacion" onchange="this.form.submit()">
+      {% for v in votaciones %}<option value="{{ v.pk }}" {% if v.pk == seleccionada.pk %}selected{% endif %}>{{ v.titulo }}</option>{% endfor %}
+    </select>
+    <noscript><button class="boton pequeno" type="submit">Ver</button></noscript>
+  </form>
+  {% if seleccionada.estado == 'abierta' %}
+    <p class="ayuda">Esta votación está abierta: cambiar opciones en curso afecta la equidad de la votación.</p>
+  {% endif %}
+  <table>
+    {% for o in opciones %}
+    <tr>
+      <td>{{ o.nombre }} {% if not o.activa %}<span class="insignia pausada">Inactiva</span>{% endif %}</td>
+      <td class="num">
+        <form method="post" class="en-linea">{% csrf_token %}
+          <input type="hidden" name="votacion" value="{{ seleccionada.pk }}"><input type="hidden" name="id" value="{{ o.pk }}">
+          {% if o.activa %}
+            <input type="hidden" name="accion" value="quitar"><button class="boton secundario pequeno" type="submit">Quitar</button>
+          {% else %}
+            <input type="hidden" name="accion" value="reactivar"><button class="boton secundario pequeno" type="submit">Reactivar</button>
+          {% endif %}
+        </form>
+      </td>
+    </tr>
+    {% empty %}
+    <tr><td>Esta votación aún no tiene opciones.</td></tr>
+    {% endfor %}
+  </table>
+  <form method="post" class="formulario">{% csrf_token %}
+    <input type="hidden" name="accion" value="agregar"><input type="hidden" name="votacion" value="{{ seleccionada.pk }}">
+    <input type="text" name="nombre" maxlength="150" placeholder="Nombre de la nueva opción" required>
+    <div class="acciones"><button class="boton" type="submit">Agregar opción</button></div>
+  </form>
+</section>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'festival/base.html' %}
+{% block titulo %}Registro{% endblock %}
+{% block contenido %}
+<p class="migas">Registro</p>
+<section class="tarjeta">
+  <h2>Crea tu cuenta</h2>
+  <form method="post" class="formulario" novalidate>
+    {% csrf_token %}
+    {% for e in form.non_field_errors %}<p class="errores">{{ e }}</p>{% endfor %}
+    {% include 'festival/_campo.html' with campo=form.cedula %}
+    {% include 'festival/_campo.html' with campo=form.celular %}
+    <div class="casilla">{{ form.mayor_edad }}<label for="{{ form.mayor_edad.id_for_label }}">{{ form.mayor_edad.label }}</label></div>
+    {% for e in form.mayor_edad.errors %}<p class="errores">{{ e }}</p>{% endfor %}
+    <div class="casilla">{{ form.datos }}<label for="{{ form.datos.id_for_label }}">{{ form.datos.label }}</label></div>
+    {% for e in form.datos.errors %}<p class="errores">{{ e }}</p>{% endfor %}
+    <div class="trampa" aria-hidden="true">{{ form.website }}</div>
+    <p class="ayuda">Te enviaremos un código de 6 dígitos a tu celular. Máximo 3 códigos por hora.</p>
+    <div class="acciones">
+      <button class="boton" type="submit">Enviar código</button>
+      <a class="boton secundario" href="{% url 'festival:login' %}">Ya tengo cuenta</a>
+    </div>
+  </form>
+</section>
+{% endblock %}
