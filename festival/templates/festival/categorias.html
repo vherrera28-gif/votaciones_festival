@@ -1,0 +1,27 @@
+{% extends 'festival/base.html' %}
+{% block titulo %}Categorías{% endblock %}
+{% block contenido %}
+<p class="migas">Categorías</p>
+<h1>Categorías</h1>
+{% if autenticado_votante %}
+  <p>Has votado en <strong>{{ votadas }}</strong> de {{ total }} categorías.</p>
+{% elif not user.is_authenticated %}
+  <p>Para votar necesitas <a href="{% url 'festival:login' %}?next={% url 'festival:categorias' %}"><strong>iniciar sesión</strong></a> o <a href="{% url 'festival:registro' %}"><strong>crear una cuenta</strong></a>.</p>
+{% endif %}
+<div class="cuadricula">
+  {% for item in categorias %}
+  <article class="tarjeta">
+    <h3>{{ item.obj.nombre }}</h3>
+    <p class="suave">
+      {% with n=item.obj.votaciones_abiertas %}
+        {% if n %}{{ n }} votación{{ n|pluralize:",es" }} abierta{{ n|pluralize }}{% else %}{{ item.obj.estado_texto }}{% endif %}
+      {% endwith %}
+      {% if item.votada %} · <span class="insignia abierta">Ya votaste</span>{% endif %}
+    </p>
+    <a class="boton pequeno" href="{% url 'festival:votaciones' item.obj.pk %}">Ver votaciones</a>
+  </article>
+  {% empty %}
+  <p>Aún no hay categorías para esta edición.</p>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'festival/base.html' %}
+{% block titulo %}{{ votacion.titulo }}{% endblock %}
+{% block contenido %}
+<p class="migas">Detalle de la votación</p>
+<section class="tarjeta">
+  <h2>{{ votacion.titulo }} <span class="insignia {{ votacion.estado }}">{{ votacion.estado_texto }}</span></h2>
+  <table>
+    <tr><th>Apertura</th><td class="num"><strong>{{ votacion.apertura|date:"j M Y, g:i a" }}</strong></td></tr>
+    <tr><th>Cierre</th><td class="num"><strong>{{ votacion.cierre|date:"j M Y, g:i a" }}</strong></td></tr>
+    <tr><th>Opciones</th><td class="num"><strong>{{ n_opciones }}</strong></td></tr>
+  </table>
+  <p class="etiqueta" style="margin-top:.8rem">Reglas</p>
+  <ul>
+    <li>Votos por persona en esta votación: {{ votacion.votos_por_votante }}. Una vez confirmado, el voto no se puede cambiar.</li>
+    {% if votacion.exigir_mayoria_edad %}<li>Solo pueden votar mayores de 18 años.</li>{% endif %}
+    {% if votacion.peso_jurado %}
+      <li>El resultado combina el voto del público ({{ votacion.peso_publico }}%) con la calificación del jurado ({{ votacion.peso_jurado }}%).</li>
+    {% else %}
+      <li>El resultado depende solo del voto del público.</li>
+    {% endif %}
+  </ul>
+  {% if not reglas_confirmadas %}<span class="por-confirmar">Reglas por confirmar con la Fundación</span>{% endif %}
+  <div class="acciones">
+    <a class="boton {% if not votacion.abierta %}inactivo{% endif %}" href="{% url 'festival:opciones' votacion.pk %}">Ver opciones</a>
+  </div>
+</section>
+<div class="acciones"><a class="boton claro" href="{% url 'festival:votaciones' votacion.categoria.pk %}">← Votaciones</a></div>
+{% endblock %}

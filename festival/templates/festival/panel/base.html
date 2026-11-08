@@ -1,0 +1,12 @@
+{% extends 'festival/base.html' %}
+{% block subnav %}
+<nav class="subnav" aria-label="Administración">
+  <div class="contenedor fila">
+    <a class="pill {% if subseccion == 'principal' %}activa{% endif %}" href="{% url 'festival:panel' %}">Panel principal</a>
+    <a class="pill {% if subseccion == 'categorias' %}activa{% endif %}" href="{% url 'festival:panel_categorias' %}">Gestión de categorías</a>
+    <a class="pill {% if subseccion == 'votaciones' %}activa{% endif %}" href="{% url 'festival:panel_votaciones' %}">Gestión de votaciones</a>
+    <a class="pill {% if subseccion == 'opciones' %}activa{% endif %}" href="{% url 'festival:panel_opciones' %}">Gestión de opciones</a>
+    <a class="pill {% if subseccion == 'resultados' %}activa{% endif %}" href="{% url 'festival:panel_resultados' %}">Consulta de resultados</a>
+  </div>
+</nav>
+{% endblock %}

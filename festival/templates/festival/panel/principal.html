@@ -1,0 +1,21 @@
+{% extends 'festival/panel/base.html' %}
+{% block titulo %}Panel principal{% endblock %}
+{% block contenido %}
+<p class="migas">Panel principal · Administración</p>
+<div class="metricas">
+  <div class="tarjeta metrica"><p class="etiqueta">Votos totales</p><p class="valor">{{ votos_totales }}</p></div>
+  <div class="tarjeta metrica"><p class="etiqueta">Votaciones abiertas</p><p class="valor">{{ abiertas }}</p></div>
+  <div class="tarjeta metrica"><p class="etiqueta">En cuarentena</p><p class="valor alerta">{{ cuarentena }}</p>
+    <a class="suave" href="{% url 'admin:festival_voto_changelist' %}?en_cuarentena__exact=1">Revisar en Django Admin</a></div>
+</div>
+<section class="tarjeta">
+  <p class="etiqueta">Accesos rápidos</p>
+  <div class="acciones">
+    <a class="boton secundario" href="{% url 'festival:panel_categorias' %}">Gestión de categorías</a>
+    <a class="boton secundario" href="{% url 'festival:panel_votaciones' %}">Gestión de votaciones</a>
+    <a class="boton secundario" href="{% url 'festival:panel_opciones' %}">Gestión de opciones</a>
+    <a class="boton secundario" href="{% url 'festival:panel_resultados' %}">Consulta de resultados</a>
+    <a class="boton secundario" href="{% url 'admin:index' %}">Django Admin (ediciones, jurado)</a>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'festival/panel/base.html' %}
+{% block titulo %}Consulta de resultados{% endblock %}
+{% block contenido %}
+<p class="migas">Consulta de resultados · Administración</p>
+{% if not seleccionada %}
+  <p>Aún no hay votaciones.</p>
+{% else %}
+<section class="tarjeta">
+  <form method="get" class="formulario">
+    <label for="sel-votacion">Votación</label>
+    <select id="sel-votacion" name="votacion" onchange="this.form.submit()">
+      {% for v in votaciones %}<option value="{{ v.pk }}" {% if v.pk == seleccionada.pk %}selected{% endif %}>{{ v.titulo }}</option>{% endfor %}
+    </select>
+    <noscript><button class="boton pequeno" type="submit">Ver</button></noscript>
+  </form>
+  {% if seleccionada.estado != 'cerrada' %}<p><span class="insignia proxima">Resultado parcial</span> La votación aún no ha cerrado.</p>{% endif %}
+  <div class="tabla-scroll">
+  <table>
+    <thead><tr><th>Opción</th><th class="num">Votos válidos</th><th class="num">Público %</th><th class="num">Jurado (1-10)</th><th class="num">Puntaje final</th></tr></thead>
+    <tbody>
+    {% for f in filas %}
+      <tr {% if forloop.first and total %}class="mejor"{% endif %}>
+        <td>{{ f.opcion.nombre }}{% if not f.opcion.activa %} <span class="insignia pausada">Inactiva</span>{% endif %}</td>
+        <td class="num">{{ f.votos }}</td>
+        <td class="num">{{ f.pct }}%</td>
+        <td class="num">{% if f.jurado is None %}—{% else %}{{ f.jurado|floatformat:1 }}{% endif %}</td>
+        <td class="num"><strong>{{ f.final }}</strong></td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="5">Esta votación no tiene opciones.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  <p class="ayuda">Puntaje final = {{ seleccionada.peso_jurado }}% jurado + {{ seleccionada.peso_publico }}% público.
+    Votos válidos: {{ total }}. En cuarentena (no cuentan): {{ cuarentena }}.</p>
+  <div class="acciones"><a class="boton secundario" href="?votacion={{ seleccionada.pk }}&exportar=1">Exportar resultados y acta</a></div>
+</section>
+{% endif %}
+{% endblock %}

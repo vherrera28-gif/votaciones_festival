@@ -1,0 +1,27 @@
+# Variables de entorno
+.env
+
+# Base de datos SQLite
+db.sqlite3
+
+# Caché de Python
+__pycache__/
+*.pyc
+
+# Entorno virtual
+venv/
+env/
+.venv/
+
+# Archivos de VS Code
+.vscode/
+
+# Archivos de JetBrains
+.idea/
+
+# Logs
+*.log
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db

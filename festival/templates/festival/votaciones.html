@@ -1,0 +1,19 @@
+{% extends 'festival/base.html' %}
+{% block titulo %}{{ categoria.nombre }}{% endblock %}
+{% block contenido %}
+<p class="migas">Votaciones disponibles</p>
+<h1>{{ categoria.nombre }}</h1>
+<div class="cuadricula">
+  {% for v in votaciones %}
+  <article class="tarjeta">
+    <h3>{{ v.titulo }}</h3>
+    <p class="suave">Cierra: {{ v.cierre|date:"j M Y, g:i a" }}</p>
+    <p><span class="insignia {{ v.estado }}">{{ v.estado_texto }}</span></p>
+    <a class="boton pequeno" href="{% url 'festival:votacion' v.pk %}">Ver detalle</a>
+  </article>
+  {% empty %}
+  <p>Votación próximamente.</p>
+  {% endfor %}
+</div>
+<div class="acciones"><a class="boton claro" href="{% url 'festival:categorias' %}">← Categorías</a></div>
+{% endblock %}

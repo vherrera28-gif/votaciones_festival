@@ -1,0 +1,17 @@
+{% extends 'festival/base.html' %}
+{% block titulo %}Confirmar voto{% endblock %}
+{% block contenido %}
+<p class="migas">Confirmación del voto</p>
+<section class="tarjeta">
+  <h2>Confirma tu voto</h2>
+  <div class="avatar">{{ opcion.nombre|slice:":1"|upper }}</div>
+  <p>Vas a votar por <strong>{{ opcion.nombre }}</strong> en <strong>{{ votacion.categoria.nombre }}</strong>.</p>
+  <p class="suave">Una vez confirmado, el voto no se puede cambiar.</p>
+  <form method="post" class="acciones">
+    {% csrf_token %}
+    <input type="hidden" name="opcion" value="{{ opcion.pk }}">
+    <button class="boton" type="submit">Confirmar voto</button>
+    <a class="boton secundario" href="{% url 'festival:opciones' votacion.pk %}">Cambiar opción</a>
+  </form>
+</section>
+{% endblock %}

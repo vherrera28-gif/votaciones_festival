@@ -1,0 +1,22 @@
+{% extends 'festival/base.html' %}
+{% block titulo %}Opciones{% endblock %}
+{% block contenido %}
+<p class="migas">Opciones disponibles</p>
+<h1>Opciones · {{ votacion.categoria.nombre }}</h1>
+{% if ya_voto %}<p>Ya votaste en esta votación. <a href="{% url 'festival:mi_voto' votacion.pk %}"><strong>Ver mi voto</strong></a></p>{% endif %}
+{% if not votacion.abierta %}<p><span class="insignia {{ votacion.estado }}">{{ votacion.estado_texto }}</span> Esta votación no admite votos en este momento.</p>{% endif %}
+<div class="cuadricula">
+  {% for o in opciones %}
+  <article class="tarjeta">
+    <div class="avatar">{{ o.nombre|slice:":1"|upper }}</div>
+    <h3>{{ o.nombre }}</h3>
+    <p class="suave">{{ o.biografia|default:"Biografía corta y muestra de audio o video." }}</p>
+    {% if o.media_url %}<p><a href="{{ o.media_url }}" target="_blank" rel="noopener">Escuchar muestra</a></p>{% endif %}
+    <a class="boton pequeno {% if ya_voto or not votacion.abierta %}inactivo{% endif %}" href="{% url 'festival:confirmar' votacion.pk %}?opcion={{ o.pk }}">Elegir</a>
+  </article>
+  {% empty %}
+  <p>Esta votación aún no tiene opciones.</p>
+  {% endfor %}
+</div>
+<div class="acciones"><a class="boton claro" href="{% url 'festival:votacion' votacion.pk %}">← Detalle</a></div>
+{% endblock %}
